@@ -33,13 +33,24 @@ class sqlUtil():
 
 class makeUrl():
     def __init__(self):
-        lower = ['a', 'b',	'c',	'd',	'e',	'f',	'g',	'h',	'i',	'j',	'k',	'l',	'm',	'n',	'o',	'p',	'q',	'r',	's',	't',	'u',	'v',	'w',	'x',	'y',	'z']
-        upper = ['A',	'B',	'C',	'D',	'E',	'F',	'G',	'H',	'I',	'J',	'K',	'L',	'M',	'N',	'O',	'P',	'Q',	'R',	'S',	'T',	'U',	'V',	'W',	'X',	'Y',	'Z']
-        number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+        self.lower = ['a', 'b',	'c',	'd',	'e',	'f',	'g',	'h',	'i',	'j',	'k',	'l',	'm',	'n',	'o',	'p',	'q',	'r',	's',	't',	'u',	'v',	'w',	'x',	'y',	'z']
+        self.upper = ['A',	'B',	'C',	'D',	'E',	'F',	'G',	'H',	'I',	'J',	'K',	'L',	'M',	'N',	'O',	'P',	'Q',	'R',	'S',	'T',	'U',	'V',	'W',	'X',	'Y',	'Z']
+        self.number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+        self.db = 'database.db'
+        self.SQL_COMMAND = ''
     def make(self):
-        s = str()
-        for i in range(2):
-            s = s + lower[ra.randint(0,25)]
-            s = s + upper[ra.randint(0,25)]
-            s = s + str(number[ra.randint(0,9)])
-        return s    
+        while True:
+            s = str()
+            for i in range(2):
+                s = s + self.lower[ra.randint(0,25)]
+                s = s + self.upper[ra.randint(0,25)]
+                s = s + str(self.number[ra.randint(0,9)])
+            con = sql.connect(self.db, timeout=10)
+            self.SQL_COMMAND= "SELECT * FROM urls where urladdress = " + "'" + str(s) + "'"
+            cur = con.cursor()
+            cur.execute(self.SQL_COMMAND)
+            result = cur.fetchone()
+            print(result)
+            if not result:
+                break    
+        return s
