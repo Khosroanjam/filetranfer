@@ -30,6 +30,19 @@ class sqlUtil():
         self.cur.execute(self.SQL_COMMAND_INSERT)
         self.con.commit()
         self.con.close()
+    
+
+class GetData():
+    def __init__(self):
+        self.con = sql.connect('database.db')
+        self.cur = self.con.cursor()
+    def get(self, url):
+        print("***#> GET FILE \n")
+        self.SQL_COMMAND_SELECT = "SELECT * FROM urls WHERE urladdress = '{0}'".format(url)
+        print("*** #> {0}".format(self.SQL_COMMAND_SELECT))
+        self.cur.execute(self.SQL_COMMAND_SELECT)
+        row = self.cur.fetchone()
+        return row   
 
 class makeUrl():
     def __init__(self):

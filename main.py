@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, flash, url_for, redirect
-from model import sqlUtil, makeUrl
+from flask import Flask, render_template, request, flash, url_for, redirect, send_from_directory
+from model import sqlUtil, makeUrl, GetData
 from werkzeug.utils import secure_filename
 import os
 
@@ -29,6 +29,20 @@ def main():
         return redirect(url_for('success'))
 
     return render_template('home.html')
+
+@app.route("/get/<string:url>")
+def checkurl(url):
+    s = GetData()
+    result = s.get(url)
+    filename = result[2]
+    return render_template('get.html', url=url, filename = filename)
+@app.route("/download/<path:filename>")
+def download(filename):
+    print(filename)
+    #uploads = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    uploads = 'upload'
+    return send_from_directory(directory=uploads,path=filename)
+
 
 @app.route('/success')
 def success():
