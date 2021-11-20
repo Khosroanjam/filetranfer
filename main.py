@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, url_for, redirect, send_from_directory
+from flask import Flask, render_template, request, flash, url_for, redirect, send_from_directory, abort
 from model import sqlUtil, makeUrl, GetData
 from werkzeug.utils import secure_filename
 import os
@@ -34,7 +34,10 @@ def main():
 def checkurl(url):
     s = GetData()
     result = s.get(url)
-    filename = result[2]
+    if result:
+        filename = result[2]
+    else:
+        return abort(404, description="فایلی پیدا نشد عزیز")
     return render_template('get.html', url=url, filename = filename)
 @app.route("/download/<path:filename>")
 def download(filename):
